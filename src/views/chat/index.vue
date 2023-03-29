@@ -10,6 +10,7 @@ import { useChat } from './hooks/useChat'
 import { useCopyCode } from './hooks/useCopyCode'
 import { useUsingContext } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
+import Tip from './components/Tip/Tip.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useChatStore, usePromptStore } from '@/store'
@@ -511,6 +512,13 @@ onUnmounted(() => {
         </div>
       </div>
     </main>
+    <footer>
+      <div class="w-full max-w-screen-xl m-auto">
+        <div class="flex items-center justify-between space-x-2">
+          <Tip></Tip>
+        </div>
+      </div>
+    </footer>
     <footer :class="footerClass">
       <div class="w-full max-w-screen-xl m-auto">
         <div class="flex items-center justify-between space-x-2">
