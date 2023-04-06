@@ -40,6 +40,60 @@ export function fetchSession<T>() {
   })
 }
 
+export function fetchCaptcha<T>(
+  params: {
+    country_code: number
+    mobile: string
+  },
+) {
+  return post<T>({
+    url: '/sms/send',
+    data: { country_code: params.country_code, mobile: params.mobile },
+  })
+}
+
+export function fetchRegister<T>(
+  params: {
+    country_code: number
+    captcha: string
+    mobile: string
+    password: string
+    confirm_password: string
+  },
+) {
+  return post<T>({
+    url: '/user/register',
+    data: params,
+  })
+}
+
+export function resetPwd<T>(
+  params: {
+    country_code: number
+    captcha: string
+    mobile: string
+    password: string
+    confirm_password: string
+  },
+) {
+  return post<T>({
+    url: '/user/reset',
+    data: params,
+  })
+}
+
+export function fetchLogin<T>(
+  params: {
+    mobile: string
+    password: string
+  },
+) {
+  return post<T>({
+    url: '/user/login',
+    data: params,
+  })
+}
+
 export function fetchVerify<T>(token: string) {
   return post<T>({
     url: '/verify',

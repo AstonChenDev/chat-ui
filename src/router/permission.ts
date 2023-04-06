@@ -3,7 +3,15 @@ import { useAuthStoreWithout } from '@/store/modules/auth'
 
 export function setupPageGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
+    if (['login', 'register', 'reset'].includes(<string>to.name)) {
+      next()
+      return
+    }
     const authStore = useAuthStoreWithout()
+    if (!authStore.token && to.name !== 'login') {
+      next({ name: 'login' })
+      return
+    }
     if (!authStore.session) {
       try {
         const data = await authStore.getSession()

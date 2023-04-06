@@ -21,6 +21,7 @@ export const useAuthStore = defineStore('auth-store', {
 
   getters: {
     isChatGPTAPI(state): boolean {
+      return true
       return state.session?.model === 'ChatGPTAPI'
     },
   },
