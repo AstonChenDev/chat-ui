@@ -168,12 +168,15 @@ function onOpen() {
   // console.log('链接上了')
 }
 
-function onError(e: Event) {
+function onError() {
+  // console.log('onError')
   Client.destroy()
   router.push('/login')
 }
 
 function onClose() {
+  // console.log('onError')
+
   ms.error('网络链接断开')
 }
 

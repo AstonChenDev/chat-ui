@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import type { FormInst, FormItemRule } from 'naive-ui'
 import { NButton, NForm, NFormItem, NIcon, NInput, useMessage } from 'naive-ui'
 import { fetchCaptcha, fetchRegister } from '@/api'
-import { useAuthStoreWithout } from '@/store'
+import { useAuthStoreWithout, useUserStore } from '@/store'
 
 interface CaptchaResponse {
   ttl: number
@@ -83,6 +83,7 @@ const handleLogin = (e: any) => {
           confirm_password: form.confirm_password,
         })
         useAuthStoreWithout().setToken(response.data.token)
+        useUserStore().updateUserInfo({ name: response.data.nickname })
         await router.push('/chat')
       }
       catch (e: any) {
@@ -118,7 +119,7 @@ async function sendCaptcha() {
     }, 1000)
   }
   catch (e) {
-    message.success('发送失败')
+    message.error('发送失败')
   }
 }
 

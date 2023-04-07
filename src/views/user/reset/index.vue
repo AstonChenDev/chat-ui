@@ -118,7 +118,7 @@ async function sendCaptcha() {
     }, 1000)
   }
   catch (e) {
-    message.success('发送失败')
+    message.error('发送失败')
   }
 }
 

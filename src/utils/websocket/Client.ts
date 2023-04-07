@@ -19,6 +19,12 @@ export interface Route {
   getCallback(cmd: number, scmd: number, type: number): any
 }
 
+interface SendData {
+  scmd: number
+  data: any
+  cmd: number
+}
+
 export class Client {
   private readonly _host: string
   private _ws: WebSocket
@@ -33,12 +39,14 @@ export class Client {
   private readonly _url: string
   private _onError?: (evt: Event) => void
   private tryCount: number
+  private sendQueue: SendData[]
 
   private constructor(host: string, token: string, useBinary = true, debug = true) {
     this._host = host
     this._token = token
     this._debug = debug
     this.tryCount = 0
+    this.sendQueue = []
     this._binaryType = useBinary ? 'arraybuffer' : 'blob'
     const str = `token=${this._token}`
     this._url = `${`${this._host}`}?${str}`
@@ -72,15 +80,27 @@ export class Client {
         else {
           clearInterval(this.heart_timer_id)
         }
-      }, 10000)
+      }, 30000)
       callback(evt)
+      const sendData = this.sendQueue.pop()
+      if (sendData !== undefined) {
+        this.send(sendData.data, sendData.cmd, sendData.scmd)
+        this.log('重连后再次发送')
+      }
     }
     return this
   }
 
   public send(data: any, cmd: number, scmd: number) {
-    if (this._ws.readyState !== this._ws.OPEN)
+    if (this._ws.readyState !== this._ws.OPEN) {
+      this.sendQueue[0] = {
+        data,
+        cmd,
+        scmd,
+      }
+      this.reconnect()
       return
+    }
     data.time = (new Date()).valueOf()
     // this.ws.close();
     this.log(`websocket 发送消息 >>>  cmd=${cmd}  scmd=${scmd}  data=`, data)
@@ -127,7 +147,6 @@ export class Client {
   public setOnClose(callback: (evt: Event) => void) {
     this._onClose = callback
     this._ws.onclose = (evt: CloseEvent) => {
-      this.reconnect()
       callback(evt)
     }
     return this
@@ -136,6 +155,7 @@ export class Client {
   public setOnError(callback: (evt: Event) => void) {
     this._onError = callback
     this._ws.onerror = (evt: Event) => {
+      this.reconnect()
       callback(evt)
     }
     return this
@@ -175,7 +195,7 @@ export class Client {
   }
 
   private reconnect() {
-    if (this.tryCount === 5)
+    if (this.tryCount >= 5)
       return
 
     try {
