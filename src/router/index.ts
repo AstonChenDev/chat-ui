@@ -18,7 +18,21 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
-
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/user/login/index.vue'),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/views/user/register/index.vue'),
+  },
+  {
+    path: '/reset',
+    name: 'reset',
+    component: () => import('@/views/user/reset/index.vue'),
+  },
   {
     path: '/404',
     name: '404',

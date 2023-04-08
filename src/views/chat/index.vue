@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { NAutoComplete, NButton, NInput, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
@@ -22,6 +22,7 @@ let controller = new AbortController()
 const openLongReply = import.meta.env.VITE_GLOB_OPEN_LONG_REPLY === 'true'
 
 const route = useRoute()
+const router = useRouter()
 const dialog = useDialog()
 const ms = useMessage()
 
@@ -146,7 +147,7 @@ async function onConversation() {
             scrollToBottom()
           }
           catch (error) {
-          //
+            //
           }
         },
       })
@@ -155,6 +156,10 @@ async function onConversation() {
     await fetchChatAPIOnce()
   }
   catch (error: any) {
+    if (error.data === 401) {
+      ms.error('用户授权已过期，请重新登录')
+      router.push('/login')
+    }
     const errorMessage = error?.message ?? t('common.wrong')
 
     if (error.message === 'canceled') {
@@ -282,6 +287,11 @@ async function onRegenerate(index: number) {
     await fetchChatAPIOnce()
   }
   catch (error: any) {
+    if (error.data === 401) {
+      ms.error('用户授权已过期，请重新登录')
+      router.push('/login')
+    }
+
     if (error.message === 'canceled') {
       updateChatSome(
         +uuid,
@@ -515,7 +525,7 @@ onUnmounted(() => {
     <footer>
       <div class="w-full max-w-screen-xl m-auto">
         <div class="flex items-center justify-between space-x-2">
-          <Tip></Tip>
+          <Tip />
         </div>
       </div>
     </footer>
