@@ -11,9 +11,9 @@ import { useCopyCode } from './hooks/useCopyCode'
 import { useUsingContext } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
 import Tip from './components/Tip/Tip.vue'
+import { useChatStore, usePromptStore, useUserStore } from '@/store'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useChatStore, usePromptStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 
@@ -206,6 +206,7 @@ async function onConversation() {
   }
   finally {
     loading.value = false
+    await useUserStore().refreshUser()
   }
 }
 
@@ -321,6 +322,7 @@ async function onRegenerate(index: number) {
   }
   finally {
     loading.value = false
+    await useUserStore().refreshUser()
   }
 }
 

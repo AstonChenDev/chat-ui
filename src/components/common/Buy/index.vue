@@ -130,7 +130,7 @@ function afterChange() {
       </NSpace>
       <NSpace justify="center">
         <NGradientText type="error">
-          <TokenDisplay @onFinish="afterChange" />
+          <TokenDisplay size="20" @onFinish="afterChange" />
         </NGradientText>
       </NSpace>
       <NSpace justify="center">
