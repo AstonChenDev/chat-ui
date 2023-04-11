@@ -19,6 +19,6 @@ const show = ref(false)
       </span>
     </HoverButton>
 
-    <Setting v-if="show" v-model:visible="show" />
+    <Setting v-model:visible="show" />
   </footer>
 </template>

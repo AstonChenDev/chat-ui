@@ -3,8 +3,7 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInst, FormItemRule } from 'naive-ui'
 import { NButton, NForm, NFormItem, NIcon, NInput, useMessage } from 'naive-ui'
-import { fetchLogin } from '@/api'
-import { useAuthStoreWithout, useUserStore } from '@/store'
+import { useUserStore } from '@/store'
 
 const loginFormRef = ref<FormInst | null>(null)
 const loading = ref(false) // 加载图标 默认false
@@ -15,8 +14,7 @@ const loginForm = reactive({
   password: '',
 })
 
-useAuthStoreWithout().removeToken()
-useUserStore().updateUserInfo({ name: '' })
+useUserStore().resetUserInfo()
 const loginRules = {
   mobile: [
     { required: true, message: '请输入手机号', trigger: 'blur' },
@@ -67,12 +65,10 @@ const handleLogin = (e: any) => {
     if (!errors) {
       loading.value = true
       try {
-        const response = await fetchLogin<UserResponse>({
+        await useUserStore().login({
           mobile: loginForm.mobile,
           password: loginForm.password,
         })
-        useAuthStoreWithout().setToken(response.data.token)
-        useUserStore().updateUserInfo({ name: response.data.nickname })
         await router.push('/chat')
       }
       catch (e: any) {

@@ -1,5 +1,5 @@
 import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
-import { post } from '@/utils/request'
+import { get, post } from '@/utils/request'
 
 export function fetchChatAPI<T = any>(
   prompt: string,
@@ -95,9 +95,57 @@ export function fetchLogin<T>(
   })
 }
 
+export function fetchUserInfo<T>(
+  params: {},
+) {
+  return post<T>({
+    url: '/user/info',
+    data: params,
+  })
+}
+
 export function fetchVerify<T>(token: string) {
   return post<T>({
     url: '/verify',
     data: { token },
+  })
+}
+
+export function fetchProducts<T>() {
+  return get<T>({
+    url: '/v1/product/list',
+    data: {},
+  })
+}
+
+export function fetchWechatNaive<T>(product_id: number) {
+  return fetchPurchase<T>({
+    product_id,
+    type: 1,
+    method: 1,
+  })
+}
+
+export function fetchPurchase<T>(
+  param: {
+    product_id: number
+    type: number
+    method: number
+  },
+) {
+  return post<T>({
+    url: '/v1/transaction/start',
+    data: { ...param },
+  })
+}
+
+export function fetchOrderStatus<T>(
+  param: {
+    out_trade_no: string
+  },
+) {
+  return post<T>({
+    url: '/v1/transaction/check',
+    data: { ...param },
   })
 }

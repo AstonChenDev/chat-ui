@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { defineAsyncComponent, ref} from 'vue'
+import { defineAsyncComponent, ref } from 'vue'
 
 const Setting = defineAsyncComponent(() => import('@/components/common/Setting/index.vue'))
 
 const show = ref(false)
+
 function showSettings() {
   show.value = true
 }
@@ -14,7 +15,7 @@ function showSettings() {
     <p class="tip-p" @click="showSettings">
       {{ $t('setting.click_tip') }}
     </p>
-    <Setting v-if="show" v-model:visible="show" />
+    <Setting v-model:visible="show" />
   </div>
 </template>
 

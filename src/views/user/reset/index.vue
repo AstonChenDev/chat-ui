@@ -3,8 +3,8 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInst, FormItemRule } from 'naive-ui'
 import { NButton, NForm, NFormItem, NIcon, NInput, useMessage } from 'naive-ui'
-import { fetchCaptcha, resetPwd } from '@/api'
-import { useAuthStoreWithout } from '@/store'
+import { fetchCaptcha } from '@/api'
+import { useUserStore } from '@/store'
 
 interface CaptchaResponse {
   ttl: number
@@ -75,14 +75,15 @@ const handleLogin = (e: any) => {
     if (!errors) {
       loading.value = true
       try {
-        const response = await resetPwd<UserResponse>({
-          country_code: form.country_code,
-          captcha: form.captcha,
-          mobile: form.mobile,
-          password: form.password,
-          confirm_password: form.confirm_password,
-        })
-        useAuthStoreWithout().setToken(response.data.token)
+        await useUserStore().resetPwd(
+          {
+            country_code: form.country_code,
+            captcha: form.captcha,
+            mobile: form.mobile,
+            password: form.password,
+            confirm_password: form.confirm_password,
+          },
+        )
         await router.push('/chat')
       }
       catch (e: any) {

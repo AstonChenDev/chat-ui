@@ -3,4 +3,5 @@ interface UserResponse {
     token: string
     nickname: string
     avatar: string
+    balance: number
 }

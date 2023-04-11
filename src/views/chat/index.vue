@@ -123,6 +123,8 @@ async function onConversation() {
             chunk = responseText.substring(lastIndex)
           try {
             const data = JSON.parse(chunk)
+            console.log('responseText', data)
+
             updateChat(
               +uuid,
               dataSources.value.length - 1,
