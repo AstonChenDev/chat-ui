@@ -60,6 +60,7 @@ export function fetchRegister<T>(
     mobile: string
     password: string
     confirm_password: string
+    inviter: string
   },
 ) {
   return post<T>({
@@ -153,6 +154,13 @@ export function fetchOrderStatus<T>(
 export function fetchNotification<T>() {
   return get<T>({
     url: '/v1/notice/list',
+    data: {},
+  })
+}
+
+export function fetchInvitees<T>() {
+  return get<T>({
+    url: '/user/invitees',
     data: {},
   })
 }

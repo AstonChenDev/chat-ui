@@ -21,12 +21,16 @@ const router = useRouter()
 //     disabled: true,
 //   },
 // ])
+const searchParams = new URLSearchParams(window.location.search)
+const queryParams = Object.fromEntries(searchParams.entries())
+
 const form = reactive({
   country_code: 86,
   captcha: '',
   mobile: '',
   password: '',
   confirm_password: '',
+  inviter: queryParams.inviter || '',
 })
 
 const message = useMessage()
@@ -81,6 +85,7 @@ const handleLogin = (e: any) => {
           mobile: form.mobile,
           password: form.password,
           confirm_password: form.confirm_password,
+          inviter: form.inviter,
         })
         await router.push('/chat')
       }
@@ -227,6 +232,17 @@ function testMobile(mobile: string) {
                 :disabled="!form.password"
                 show-password-on="click"
                 :placeholder="loginRules.confirm_password[0].message"
+              >
+                <template #prefix>
+                  <NIcon size="18" color="#808695" />
+                </template>
+              </NInput>
+            </NFormItem>
+            <NFormItem path="inviter">
+              <NInput
+                v-model:value="form.inviter"
+                type="text"
+                placeholder="如果有邀请码，请填写"
               >
                 <template #prefix>
                   <NIcon size="18" color="#808695" />

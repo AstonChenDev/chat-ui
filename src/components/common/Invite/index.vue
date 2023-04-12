@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { NAvatar, NButton, NGradientText, NModal, NSpace } from 'naive-ui'
-import defaultAvatar from '@/assets/avatar.jpg'
+import { computed, ref } from 'vue'
+import { NButton, NGradientText, NModal, NSpace, useDialog } from 'naive-ui'
 import { useUserStore } from '@/store'
+import { fetchInvitees } from '@/api'
+import { copyText } from '@/utils/format'
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emit>()
 const userStore = useUserStore()
-// const message = useMessage()
-// const router = useRouter()
+const dialog = useDialog()
 const userInfo = computed(() => userStore.userInfo)
 
 interface Props {
@@ -27,37 +27,71 @@ const show = computed({
     emit('update:visible', visible)
   },
 })
+
+const invite_count = ref(0)
+const bonus_tokens = computed(() => {
+  return invite_count.value * 100000
+})
+
+const link = computed(() => {
+  return `${window.location.origin}?inviter=${userInfo.value.uid}#/register`
+})
+
+async function getInviteList() {
+  const { data } = await fetchInvitees<[]>()
+  invite_count.value = data.length
+}
+
+function copy() {
+  if (copyText({ text: link.value ?? '' })) {
+    dialog.success({
+      title: '复制成功',
+      content: '快去邀请你的小伙伴吧~',
+      positiveText: 'OK',
+    })
+  }
+}
+
+getInviteList()
 </script>
 
 <template>
-  <NModal v-model:show="show" preset="card" title="邀请用户" style="width: 600px; max-width: 80vw; min-width: 200px;">
+  <NModal
+    v-model:show="show" preset="card" title="邀请用户"
+    style="width: 600px; max-width: 80vw; min-width: 200px;"
+  >
     <NSpace justify="center">
       <NSpace vertical>
         <NSpace justify="center">
-          <NAvatar
-            :size="80"
-            round
-            :src="defaultAvatar"
-          />
+          <NGradientText size="20" type="primary">
+            我的专属邀请链接
+          </NGradientText>
         </NSpace>
+        <NSpace justify="center" />
         <NSpace justify="center">
-          ID: {{ userInfo.uid }}
+          <b>{{ link }}</b>
         </NSpace>
+        <NSpace justify="center" />
         <NSpace justify="center">
-          {{ userInfo.nickname }}
-        </NSpace>
-        <NSpace justify="center">
-          <NButton strong secondary type="primary">
-            免费获取Token
+          <NButton strong secondary round type="primary" @click="copy">
+            点击复制
           </NButton>
         </NSpace>
-        <NSpace justify="center">
+        <NSpace justify="center" />
+
+        <NSpace justify="center" style="text-align: center">
+          当您通过分享您的专属链接注册的好友，每邀请一位好友注册成功，
           <NGradientText type="error">
-            Token余额： {{ userInfo.balance }}
-            <NButton strong secondary type="info">
-              充值
-            </NButton>
+            您将获得 10万免费Token额度，可无限续杯。
           </NGradientText>
+          快来邀请您的好友加入我们吧！
+        </NSpace>
+
+        <NSpace justify="center" style="text-align: center">
+          已注册：{{ invite_count }}人；
+        </NSpace>
+        <NSpace justify="center" style="text-align: center">
+          已获得免费Token数量：{{ bonus_tokens }}
         </NSpace>
       </NSpace>
     </NSpace>

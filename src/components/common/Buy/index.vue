@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import {
-  NAvatar,
   NCard,
   NGradientText,
   NModal,
   NSpace,
   useMessage,
 } from 'naive-ui'
-import defaultAvatar from '@/assets/avatar.jpg'
 import { fetchOrderStatus, fetchProducts, fetchWechatNaive } from '@/api'
 import type { Response } from '@/utils/request'
 import TokenDisplay from '@/components/common/TokenDisplay/index.vue'
 import QRCode from '@/components/common/QRCode/index.vue'
 import { useUserStore } from '@/store'
+import Avatar from '@/components/common/Avatar/index.vue'
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emit>()
@@ -122,11 +121,7 @@ function afterChange() {
   <NModal v-model:show="show" preset="card" title="购买套餐" style="width: 600px; max-width: 80vw; min-width: 200px;">
     <NSpace vertical>
       <NSpace justify="center">
-        <NAvatar
-          :size="80"
-          round
-          :src="defaultAvatar"
-        />
+        <Avatar :size="80" :font-size="20" />
       </NSpace>
       <NSpace justify="center">
         <NGradientText type="error">

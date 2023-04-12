@@ -51,6 +51,7 @@ export const useUserStore = defineStore('user-store', {
       mobile: string
       password: string
       confirm_password: string
+      inviter: string
     }) {
       const response = await fetchRegister<UserResponse>(
         {
@@ -59,6 +60,7 @@ export const useUserStore = defineStore('user-store', {
           mobile: params.mobile,
           password: params.password,
           confirm_password: params.confirm_password,
+          inviter: params.inviter,
         },
       )
       this.updateUserInfo(response.data)

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { NAvatar, NButton, NGradientText, NModal, NSpace } from 'naive-ui'
-import defaultAvatar from '@/assets/avatar.jpg'
+import { NButton, NGradientText, NModal, NSpace } from 'naive-ui'
 import { useUserStore } from '@/store'
 import Buy from '@/components/common/Buy/index.vue'
 import Invite from '@/components/common/Invite/index.vue'
+import Avatar from '@/components/common/Avatar/index.vue'
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emit>()
@@ -37,10 +37,10 @@ function toBuy() {
   show.value = false
 }
 
-// function toInvite() {
-//   showInvite.value = true
-//   show.value = false
-// }
+function toInvite() {
+  showInvite.value = true
+  show.value = false
+}
 
 function quitLogin() {
   router.push('/login')
@@ -55,11 +55,7 @@ function quitLogin() {
     <NSpace justify="center">
       <NSpace vertical>
         <NSpace justify="center">
-          <NAvatar
-            :size="80"
-            round
-            :src="defaultAvatar"
-          />
+          <Avatar :size="80" :font-size="20" />
         </NSpace>
         <NSpace justify="center">
           ID: {{ userInfo.uid }}
@@ -67,11 +63,11 @@ function quitLogin() {
         <NSpace justify="center">
           {{ userInfo.nickname }}
         </NSpace>
-        <!--        <NSpace justify="center"> -->
-        <!--          <NButton strong secondary type="primary" @click="toInvite"> -->
-        <!--            免费获取Token -->
-        <!--          </NButton> -->
-        <!--        </NSpace> -->
+        <NSpace justify="center">
+          <NButton strong secondary type="primary" @click="toInvite">
+            免费获取Token
+          </NButton>
+        </NSpace>
         <NSpace justify="center">
           <NGradientText type="error">
             Token余额： {{ userInfo.balance }}
