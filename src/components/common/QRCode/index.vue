@@ -51,8 +51,8 @@ const qr_data = reactive({
    */
   image, // 二维码中心的图片
   imageOptions: {
-    hideBackgroundDots: true, // 隐藏图片背后有点
-    imageSize: 0.5,
+    hideBackgroundDots: false, // 隐藏图片背后有点
+    imageSize: 0,
     margin: 5,
     crossOrigin: 'anonymous', // anonymous | use-credentials
   },
@@ -60,41 +60,26 @@ const qr_data = reactive({
    * 二维码点配置
    */
   dotsOptions: {
-    type: 'rounded', // 二维码样式 square | dots | rounded | extra-rounded | classy | classy-rounded
-    color: '#6a1a4c',
-    // 渐变色
-    gradient: {
-      type: 'linear', // linear线性渐变 | radial径向渐变
-      rotation: 0,
-      colorStops: [
-        {
-          offset: 0,
-          color: '#fa5aec',
-        },
-        {
-          offset: 1,
-          color: '#377ded',
-        },
-      ],
-    },
+    type: 'square', // 二维码样式 square | dots | rounded | extra-rounded | classy | classy-rounded
+    color: '#000000',
   },
   /**
    * 角落广场配置
    */
   cornersSquareOptions: {
-    type: 'extra-rounded', // none | square | dot | extra-rounded
-    color: '#8fdfbd',
+    type: 'square', // none | square | dot | extra-rounded
+    color: '#000000',
     gradient: {
       type: 'linear',
       rotation: 0,
       colorStops: [
         {
           offset: 0,
-          color: '#548bd3',
+          color: '#000000',
         },
         {
           offset: 1,
-          color: '#00ffbf',
+          color: '#000000',
         },
       ],
     },
@@ -103,7 +88,7 @@ const qr_data = reactive({
    * 角落点配置
    */
   cornersDotOptions: {
-    type: 'dot', // none | square | dot
+    type: 'square', // none | square | dot
     color: '#000000',
     gradient: {
       type: 'radial',
@@ -111,11 +96,11 @@ const qr_data = reactive({
       colorStops: [
         {
           offset: 0,
-          color: '#ff00ea',
+          color: '#000000',
         },
         {
           offset: 1,
-          color: '#00aaff',
+          color: '#000000',
         },
       ],
     },
@@ -136,7 +121,7 @@ function copyAndJump() {
     dialog.success({
       title: '即将跳转微信',
       content: '复制成功，跳转到微信后将链接发送至聊天框，点击链接即可支付',
-      positiveText: 'okok',
+      positiveText: 'OK',
       onPositiveClick: () => {
         window.open(qr_data.value)
       },
@@ -170,16 +155,18 @@ function copyAndJump() {
     <template #footer>
       <NSpace vertical>
         <NGradientText type="error" size="15">
-          <b>手机发起支付时请注意：</b>
+          <b>手机端目前不支持直接唤起微信支付：</b>
         </NGradientText>
-        <NSpace justify="center">
-          支付时如果使用通过二维码识别，微信会提示无法支付，建议点击这里复制支付链接并以消息的形式发送在聊天框，然后点击链接进行支付。
-          或者使用另一个手机扫码支付
-          <b>{{ qr_data.value }}</b>
-          <NButton round type="info" @click="copyAndJump">
-            点击复制
-          </NButton>
+        <NSpace vertical>
+          1.建议在电脑浏览器打开，直接微信扫码支付
         </NSpace>
+      </NSpace>
+      <NSpace justify="center">
+        2.手机端打开需要复制此支付链接转发到微信任意联系人，点击链接可以支付。
+        <b>{{ qr_data.value }}</b>
+        <NButton round type="info" @click="copyAndJump">
+          点击复制
+        </NButton>
       </NSpace>
     </template>
   </NModal>

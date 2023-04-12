@@ -9,12 +9,14 @@ const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
 const from = ref(userInfo.value.balance)
 const to = ref(userInfo.value.balance)
+const duration = ref(2000)
 
 interface Emit {
   (e: 'onFinish', current: number): void
 }
 
 watch(userInfo, (newVal: UserInfo, oldValue: UserInfo) => {
+  duration.value = Math.abs(oldValue.balance - newVal.balance) > 10000 ? 5000 : 2000
   from.value = oldValue.balance
   to.value = newVal.balance
 })
@@ -32,7 +34,7 @@ function onFinish() {
       :from="from"
       :to="to"
       :active="true"
-      :duration="5000"
+      :duration="duration"
       :on-finish="onFinish"
     />
   </NGradientText>

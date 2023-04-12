@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { computed, nextTick } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useAppStore, useChatStore } from '@/store'
+import Buy from '@/components/common/Buy/index.vue'
 
 interface Props {
   usingContext: boolean
@@ -9,13 +10,14 @@ interface Props {
 
 interface Emit {
   (ev: 'export'): void
+
   (ev: 'toggleUsingContext'): void
 }
 
 defineProps<Props>()
 
 const emit = defineEmits<Emit>()
-
+const showRecharge = ref(false)
 const appStore = useAppStore()
 const chatStore = useChatStore()
 
@@ -42,6 +44,7 @@ function toggleUsingContext() {
 </script>
 
 <template>
+  <Buy v-model:visible="showRecharge" />
   <header
     class="sticky top-0 left-0 right-0 z-30 border-b dark:border-neutral-800 bg-white/80 dark:bg-black/20 backdrop-blur"
   >
@@ -62,6 +65,11 @@ function toggleUsingContext() {
         {{ currentChatHistory?.title ?? '' }}
       </h1>
       <div class="flex items-center space-x-2">
+        <HoverButton @click="showRecharge = true">
+          <span class="text-sm text-[#4b9e5f] dark:text-[#4b9e5f]">
+            充值
+          </span>
+        </HoverButton>
         <HoverButton @click="toggleUsingContext">
           <span class="text-xl" :class="{ 'text-[#4b9e5f]': usingContext, 'text-[#a8071a]': !usingContext }">
             <SvgIcon icon="ri:chat-history-line" />
