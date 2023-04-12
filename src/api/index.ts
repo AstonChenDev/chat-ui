@@ -149,3 +149,10 @@ export function fetchOrderStatus<T>(
     data: { ...param },
   })
 }
+
+export function fetchNotification<T>() {
+  return get<T>({
+    url: '/v1/notice/list',
+    data: {},
+  })
+}

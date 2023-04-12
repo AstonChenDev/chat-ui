@@ -16,6 +16,7 @@ import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
+import Notification from '@/components/common/Notification/index.vue'
 
 let controller = new AbortController()
 
@@ -474,6 +475,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <Notification />
   <div class="flex flex-col w-full h-full">
     <HeaderComponent
       v-if="isMobile"
