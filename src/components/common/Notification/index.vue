@@ -13,6 +13,7 @@ async function load() {
         notification.info({
           title: datum.title,
           content: datum.content,
+          keepAliveOnHover: true,
           duration: 5000,
         })
       }
