@@ -2,9 +2,10 @@
 import { computed, reactive } from 'vue'
 import QRCodeVue3 from 'qrcode-vue3'
 import {
-  NModal, NSpace,
+  NButton, NGradientText, NModal, NSpace, useDialog,
 } from 'naive-ui'
 import image from '@/assets/favicon.svg'
+import { copyText } from '@/utils/format'
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emit>()
@@ -21,7 +22,7 @@ interface Emit {
 const url = computed(() => {
   return props.codeUrl
 })
-
+const dialog = useDialog()
 const qr_data = reactive({
   /**
    * 基础配置
@@ -129,12 +130,25 @@ const show = computed({
     emit('update:visible', visible)
   },
 })
+
+function copyAndJump() {
+  if (copyText({ text: qr_data.value ?? '' })) {
+    dialog.success({
+      title: '即将跳转微信',
+      content: '复制成功，跳转到微信后将链接发送至聊天框，点击链接即可支付',
+      positiveText: 'okok',
+      onPositiveClick: () => {
+        window.open(qr_data.value)
+      },
+    })
+  }
+}
 </script>
 
 <template>
   <NModal
     v-model:show="show" preset="card" title="请使用微信扫码支付" header-style="text-align:center"
-    :style="`width:${qr_data.width}px;height:${qr_data.height + 30}px`"
+    :style="`width:${qr_data.width}px;`"
   >
     <NSpace vertical>
       <NSpace justify="center">
@@ -153,6 +167,21 @@ const show = computed({
         />
       </NSpace>
     </NSpace>
+    <template #footer>
+      <NSpace vertical>
+        <NGradientText type="error" size="15">
+          <b>手机发起支付时请注意：</b>
+        </NGradientText>
+        <NSpace justify="center">
+          支付时如果使用通过二维码识别，微信会提示无法支付，建议点击这里复制支付链接并以消息的形式发送在聊天框，然后点击链接进行支付。
+          或者使用另一个手机扫码支付
+          <b>{{ qr_data.value }}</b>
+          <NButton round type="info" @click="copyAndJump">
+            点击复制
+          </NButton>
+        </NSpace>
+      </NSpace>
+    </template>
   </NModal>
 </template>
 

@@ -24,7 +24,7 @@ export function includeCode(text: string | null | undefined) {
  * 复制文本
  * @param options
  */
-export function copyText(options: { text: string; origin?: boolean }) {
+export function copyText(options: { text: string; origin?: boolean }): boolean {
   const props = { origin: true, ...options }
 
   let input: HTMLInputElement | HTMLTextAreaElement
@@ -38,7 +38,9 @@ export function copyText(options: { text: string; origin?: boolean }) {
   input.value = props.text
   document.body.appendChild(input)
   input.select()
+  let res = false
   if (document.execCommand('copy'))
-    document.execCommand('copy')
+    res = document.execCommand('copy')
   document.body.removeChild(input)
+  return res
 }
