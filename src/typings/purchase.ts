@@ -3,6 +3,7 @@ declare namespace Purchase {
     id: number
     name: string
     price: number
+    origin_price: number
     tokens: number
     icon: string
     desc: string

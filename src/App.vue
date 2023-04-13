@@ -16,7 +16,11 @@ const { language } = useLanguage()
     :locale="language"
   >
     <NaiveProvider>
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <transition appear name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </RouterView>
     </NaiveProvider>
   </NConfigProvider>
 </template>

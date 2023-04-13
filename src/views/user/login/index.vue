@@ -2,8 +2,11 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInst, FormItemRule } from 'naive-ui'
-import { NButton, NForm, NFormItem, NIcon, NInput, useMessage } from 'naive-ui'
+import { NButton, NForm, NFormItem, NInput, useMessage } from 'naive-ui'
 import { useUserStore } from '@/store'
+import UserLayout from '@/views/user/components/Layout/index.vue'
+import IconPhone from '@/icons/phone.vue'
+import IconPassword from '@/icons/password.vue'
 
 const loginFormRef = ref<FormInst | null>(null)
 const loading = ref(false) // 加载图标 默认false
@@ -91,72 +94,60 @@ function gotoReset() {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen  items-center justify-center view-account">
-    <h1 class="text-2xl md:text-4xl font-bold text-indigo-900">
-      AI宇宙
-    </h1>
-    <div class="md:flex dark:bg-gray-500 bg-gray-100 rounded-xl shadow-2xl p-8 md:p-0 mt-10">
-      <div class="pt-6 md:p-8 space-y-4">
-        <div class="text-3xl text-center font-black text-indigo-900">
+  <UserLayout title="登录">
+    <NForm
+      ref="loginFormRef"
+      label-placement="left"
+      size="large"
+      :model="loginForm"
+      :rules="loginRules"
+    >
+      <NFormItem path="mobile">
+        <NInput
+          v-model:value="loginForm.mobile"
+          :placeholder="loginRules.mobile[0].message"
+        >
+          <template #prefix>
+            <IconPhone />
+          </template>
+        </NInput>
+      </NFormItem>
+      <NFormItem path="password">
+        <NInput
+          v-model:value="loginForm.password"
+          type="password"
+          show-password-on="click"
+          :placeholder="loginRules.password[0].message"
+        >
+          <template #prefix>
+            <IconPassword />
+          </template>
+        </NInput>
+      </NFormItem>
+      <NFormItem>
+        <NButton
+          type="primary"
+          size="large"
+          round
+          :loading="loading"
+          block
+          @click="handleLogin"
+        >
           登录
-        </div>
-        <div class="font-medium">
-          <NForm
-            ref="loginFormRef"
-            label-placement="left"
-            size="large"
-            :model="loginForm"
-            :rules="loginRules"
-          >
-            <NFormItem path="mobile">
-              <NInput
-                v-model:value="loginForm.mobile"
-                :placeholder="loginRules.mobile[0].message"
-              >
-                <template #prefix>
-                  <NIcon size="18" color="#808695" />
-                </template>
-              </NInput>
-            </NFormItem>
-            <NFormItem path="password">
-              <NInput
-                v-model:value="loginForm.password"
-                type="password"
-                show-password-on="click"
-                :placeholder="loginRules.password[0].message"
-              >
-                <template #prefix>
-                  <NIcon size="18" color="#808695" />
-                </template>
-              </NInput>
-            </NFormItem>
-            <NFormItem>
-              <NButton
-                type="primary"
-                size="large"
-                :loading="loading"
-                block
-                @click="handleLogin"
-              >
-                登录
-              </NButton>
-            </NFormItem>
-          </NForm>
-          还没有账号？请 <a class="text-blue-400" href="" @click.prevent="gotoRegister">注册</a>, 忘记密码请 <a
-            class="text-blue-400" href="" @click.prevent="gotoReset"
-          >重置密码</a>
-        </div>
-      </div>
-    </div>
-  </div>
+        </NButton>
+      </NFormItem>
+    </NForm>
+    还没有账号？请 <a class="text-blue-400" href="" @click.prevent="gotoRegister">注册</a>, 忘记密码请 <a
+      class="text-blue-400" href="" @click.prevent="gotoReset"
+    >重置密码</a>
+  </UserLayout>
 </template>
 
 <style scoped>
-@media (min-width: 768px) {
-  .view-account {
-    background-repeat: no-repeat;
-    background-position: 50%;
-    background-size: 100%;
-  }
+.view-account {
+  box-shadow: 0 0 20px 5px #2828284d;
+  backdrop-filter: blur(2px);
+  background-color: rgba(255, 255, 255, 0); /* 50% 透明白色 */
+  background-color: rgba(255, 255, 255, 0.1); /* 50% 透明白色 */
 }
 </style>

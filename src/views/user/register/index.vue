@@ -2,9 +2,14 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInst, FormItemRule } from 'naive-ui'
-import { NButton, NForm, NFormItem, NIcon, NInput, useMessage } from 'naive-ui'
+import { NButton, NForm, NFormItem, NInput, useMessage } from 'naive-ui'
+import UserLayout from '@/views/user/components/Layout/index.vue'
 import { fetchCaptcha } from '@/api'
 import { useUserStore } from '@/store'
+import IconPhone from '@/icons/phone.vue'
+import IconCode from '@/icons/code.vue'
+import IconPassword from '@/icons/password.vue'
+import IconInviter from '@/icons/inviter.vue'
 
 interface CaptchaResponse {
   ttl: number
@@ -172,100 +177,89 @@ function testMobile(mobile: string) {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen  items-center justify-center view-account">
-    <h1 class="text-2xl md:text-4xl font-bold text-indigo-900">
-      AI宇宙
-    </h1>
-    <div class="md:flex dark:bg-gray-500 bg-gray-100 rounded-xl shadow-2xl p-8 md:p-0 mt-10">
-      <div class="pt-6 md:p-8 space-y-4">
-        <div class="text-3xl text-center font-black text-indigo-900">
-          注册
-        </div>
-        <div class="font-medium">
-          <NForm
-            ref="formRef"
-            label-placement="left"
-            size="large"
-            :model="form"
-            :rules="loginRules"
-          >
-            <NFormItem path="mobile">
-              <!--              <NSelect v-model:value="form.country_code" :options="options" /> -->
-              <NInput
-                v-model:value="form.mobile"
-                :placeholder="loginRules.mobile[0].message"
-              >
-                <template #prefix>
-                  <NIcon size="18" color="#808695" />
-                </template>
-              </NInput>
-            </NFormItem>
-            <NFormItem path="captcha">
-              <NInput
-                v-model:value="form.captcha"
-                :placeholder="loginRules.captcha.message"
-              >
-                <template #prefix>
-                  <NIcon size="18" color="#808695" />
-                </template>
-              </NInput>
-              <NButton type="info" :disabled="countDown > 0" @click="sendCaptcha">
-                {{ countDown > 0 ? `${countDown}秒后重试` : '获取验证码' }}
-              </NButton>
-            </NFormItem>
-            <NFormItem path="password">
-              <NInput
-                v-model:value="form.password"
-                type="password"
-                show-password-on="click"
-                :placeholder="loginRules.password[0].message"
-              >
-                <template #prefix>
-                  <NIcon size="18" color="#808695" />
-                </template>
-              </NInput>
-            </NFormItem>
-            <NFormItem path="confirm_password">
-              <NInput
-                v-model:value="form.confirm_password"
-                type="password"
-                :disabled="!form.password"
-                show-password-on="click"
-                :placeholder="loginRules.confirm_password[0].message"
-              >
-                <template #prefix>
-                  <NIcon size="18" color="#808695" />
-                </template>
-              </NInput>
-            </NFormItem>
-            <NFormItem path="inviter">
-              <NInput
-                v-model:value="form.inviter"
-                type="text"
-                placeholder="如果有邀请码，请填写"
-              >
-                <template #prefix>
-                  <NIcon size="18" color="#808695" />
-                </template>
-              </NInput>
-            </NFormItem>
-            <NFormItem>
-              <NButton
-                type="primary"
-                size="large"
-                :loading="loading"
-                block
-                @click="handleLogin"
-              >
-                提交
-              </NButton>
-            </NFormItem>
-          </NForm>
-          已经注册过账号？请 <a class="text-blue-400" href="" @click.prevent="gotoLogin">登录</a>
-        </div>
-      </div>
-    </div>
-  </div>
+  <UserLayout title="注册">
+    <NForm
+      ref="formRef"
+      label-placement="left"
+      size="large"
+      :model="form"
+      :rules="loginRules"
+    >
+      <NFormItem path="mobile">
+        <!--              <NSelect v-model:value="form.country_code" :options="options" /> -->
+        <NInput
+          v-model:value="form.mobile"
+          :placeholder="loginRules.mobile[0].message"
+        >
+          <template #prefix>
+            <IconPhone />
+          </template>
+        </NInput>
+      </NFormItem>
+      <NFormItem path="captcha">
+        <NInput
+          v-model:value="form.captcha"
+          :placeholder="loginRules.captcha.message"
+        >
+          <template #prefix>
+            <IconCode />
+          </template>
+        </NInput>
+        <NButton type="info" :disabled="countDown > 0" @click="sendCaptcha">
+          {{ countDown > 0 ? `${countDown}秒后重试` : '获取验证码' }}
+        </NButton>
+      </NFormItem>
+      <NFormItem path="password">
+        <NInput
+          v-model:value="form.password"
+          type="password"
+          show-password-on="click"
+          :placeholder="loginRules.password[0].message"
+        >
+          <template #prefix>
+            <IconPassword />
+          </template>
+        </NInput>
+      </NFormItem>
+      <NFormItem path="confirm_password">
+        <NInput
+          v-model:value="form.confirm_password"
+          type="password"
+          :disabled="!form.password"
+          show-password-on="click"
+          :placeholder="loginRules.confirm_password[0].message"
+        >
+          <template #prefix>
+            <IconPassword />
+          </template>
+        </NInput>
+      </NFormItem>
+      <NFormItem path="inviter">
+        <NInput
+          v-model:value="form.inviter"
+          type="text"
+          placeholder="如果有邀请码，请填写"
+        >
+          <template #prefix>
+            <IconInviter />
+          </template>
+        </NInput>
+      </NFormItem>
+      <NFormItem>
+        <NButton
+          type="primary"
+          size="large"
+          round
+          :loading="loading"
+          block
+          @click="handleLogin"
+        >
+          提交
+        </NButton>
+      </NFormItem>
+    </NForm>
+    已经注册过账号？请 <a class="text-blue-400" href="" @click.prevent="gotoLogin">登录</a>
+  </UserLayout>
 </template>
 
 <style scoped>

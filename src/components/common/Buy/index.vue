@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import {
+  NButton,
   NCard,
   NGradientText,
   NModal,
@@ -13,6 +14,7 @@ import TokenDisplay from '@/components/common/TokenDisplay/index.vue'
 import QRCode from '@/components/common/QRCode/index.vue'
 import { useUserStore } from '@/store'
 import Avatar from '@/components/common/Avatar/index.vue'
+import Invite from '@/components/common/Invite/index.vue'
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emit>()
@@ -23,6 +25,7 @@ const wechat_naive = ref<Purchase.WechatNaive>({
   code_url: '',
   order_no: '',
 })
+const showInvite = ref(false)
 const select_product_id = ref<number>(0)
 let timer: NodeJS.Timer
 
@@ -117,6 +120,7 @@ function afterChange() {
 </script>
 
 <template>
+  <Invite v-model:visible="showInvite" />
   <QRCode v-model:visible="show_qr" :code-url="wechat_naive.code_url" />
   <NModal v-model:show="show" preset="card" title="购买套餐" style="width: 600px; max-width: 80vw; min-width: 200px;">
     <NSpace vertical>
@@ -152,28 +156,29 @@ function afterChange() {
           </NSpace>
           <NSpace vertical>
             <NSpace justify="center">
-              <NGradientText type="warning" size="20">
+              <NGradientText type="warning" size="23">
                 <b>￥{{ product.price }}</b>
+              </NGradientText>
+              <NGradientText type="warning" size="10">
+                <del>￥{{ product.origin_price }}</del>
               </NGradientText>
             </NSpace>
           </NSpace>
         </NCard>
       </NSpace>
-      <!--      <NSpace justify="center"> -->
-      <!--        <NButton strong secondary type="primary" round> -->
-      <!--          免费获取Token -->
-      <!--        </NButton> -->
-      <!--      </NSpace> -->
+      <NSpace justify="center">
+        <NButton strong secondary type="primary" round @click="showInvite = true">
+          免费获取Token
+        </NButton>
+      </NSpace>
     </NSpace>
   </NModal>
 </template>
 
 <style scoped>
-.selecting {
-  cursor: not-allowed;
-}
-
-.unselecting {
-  cursor: pointer;
+del {
+  color: red;
+  text-decoration: line-through;
+  font-style: italic;
 }
 </style>

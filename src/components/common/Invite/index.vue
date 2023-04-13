@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { NButton, NGradientText, NModal, NSpace, useDialog } from 'naive-ui'
+import { NButton, NGradientText, NModal, NNumberAnimation, NSpace, useDialog } from 'naive-ui'
 import { useUserStore } from '@/store'
 import { fetchInvitees } from '@/api'
 import { copyText } from '@/utils/format'
@@ -29,6 +29,7 @@ const show = computed({
 })
 
 const invite_count = ref(0)
+const invite_bonus = ref(0)
 const bonus_tokens = computed(() => {
   return invite_count.value * 100000
 })
@@ -38,8 +39,12 @@ const link = computed(() => {
 })
 
 async function getInviteList() {
-  const { data } = await fetchInvitees<[]>()
-  invite_count.value = data.length
+  const { data } = await fetchInvitees<{
+    list: []
+    bonus: number
+  }>()
+  invite_count.value = data.list.length
+  invite_bonus.value = data.bonus
 }
 
 function copy() {
@@ -82,16 +87,19 @@ getInviteList()
         <NSpace justify="center" style="text-align: center">
           当您通过分享您的专属链接注册的好友，每邀请一位好友注册成功，
           <NGradientText type="error">
-            您将获得 10万免费Token额度，可无限续杯。
+            您将获得
+            <NNumberAnimation ref="numberAnimationInstRef" :from="invite_bonus" :to="invite_bonus" show-separator />
+            免费Token额度，可无限续杯。
           </NGradientText>
           快来邀请您的好友加入我们吧！
         </NSpace>
 
         <NSpace justify="center" style="text-align: center">
-          已注册：{{ invite_count }}人；
+          已注册：{{ invite_count }}人
         </NSpace>
         <NSpace justify="center" style="text-align: center">
-          已获得免费Token数量：{{ bonus_tokens }}
+          已获得免费Token数量：
+          <NNumberAnimation ref="numberAnimationInstRef" :from="bonus_tokens" :to="bonus_tokens" show-separator />
         </NSpace>
       </NSpace>
     </NSpace>

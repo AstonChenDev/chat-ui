@@ -5,7 +5,6 @@ import type { Language, Theme } from '@/store/modules/app/helper'
 import { SvgIcon } from '@/components/common'
 import { useAppStore } from '@/store'
 import contact from '@/assets/contact.jpg'
-import support from '@/assets/support.jpg'
 
 const appStore = useAppStore()
 
@@ -78,10 +77,6 @@ const languageOptions: { label: string; key: Language; value: Language }[] = [
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.contact') }}</span>
         <img :src="contact" style="width: calc((100% - 100px) * 0.90);" :alt="$t('setting.contact')">
-      </div>
-      <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">{{ $t('setting.support') }}</span>
-        <img :src="support" style="width: calc((100% - 100px) * 0.9);" :alt="$t('setting.support')">
       </div>
     </div>
   </div>
