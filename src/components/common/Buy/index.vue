@@ -138,6 +138,7 @@ function afterChange() {
           style="border-radius: 10px;"
           :style="product.id === select_product_id ? 'background-color: rgb(205, 255, 205)' : ''"
           :class=" select_product_id > 0 ? 'selecting' : 'unselecting'"
+          size="small"
           @click="requestBuy(product)"
         >
           <NSpace vertical>

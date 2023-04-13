@@ -85,11 +85,14 @@ getInviteList()
         <NSpace justify="center" />
 
         <NSpace justify="center" style="text-align: center">
-          当您通过分享您的专属链接注册的好友，每邀请一位好友注册成功，
+          每当有用户通过您分享的专属链接注册成功，
           <NGradientText type="error">
             您将获得
             <NNumberAnimation ref="numberAnimationInstRef" :from="invite_bonus" :to="invite_bonus" show-separator />
-            免费Token额度，可无限续杯。
+            免费Token额度
+          </NGradientText>
+          <NGradientText type="error">
+            可无限续杯。
           </NGradientText>
           快来邀请您的好友加入我们吧！
         </NSpace>
