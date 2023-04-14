@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { NButton, NGradientText, NModal, NNumberAnimation, NSpace, useDialog } from 'naive-ui'
+import { NGradientText, NModal, NNumberAnimation, NSpace, useMessage } from 'naive-ui'
 import { useUserStore } from '@/store'
 import { fetchInvitees } from '@/api'
-import { copyText } from '@/utils/format'
+import InputCopyable from '@/components/common/InputCopyable/index.vue'
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emit>()
 const userStore = useUserStore()
-const dialog = useDialog()
+const message = useMessage()
 const userInfo = computed(() => userStore.userInfo)
 
 interface Props {
@@ -47,14 +47,8 @@ async function getInviteList() {
   invite_bonus.value = data.bonus
 }
 
-function copy() {
-  if (copyText({ text: link.value ?? '' })) {
-    dialog.success({
-      title: '复制成功',
-      content: '快去邀请你的小伙伴吧~',
-      positiveText: 'OK',
-    })
-  }
+function copySuccess() {
+  message.success('复制成功，快去邀请你的小伙伴吧~')
 }
 
 getInviteList()
@@ -74,14 +68,9 @@ getInviteList()
         </NSpace>
         <NSpace justify="center" />
         <NSpace justify="center">
-          <b>{{ link }}</b>
+          <InputCopyable :input="link" @on-finish="copySuccess" />
         </NSpace>
         <NSpace justify="center" />
-        <NSpace justify="center">
-          <NButton strong secondary round type="primary" @click="copy">
-            点击复制
-          </NButton>
-        </NSpace>
         <NSpace justify="center" />
 
         <NSpace justify="center" style="text-align: center">

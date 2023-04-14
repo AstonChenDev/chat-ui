@@ -6,6 +6,7 @@ import Sider from './sider/index.vue'
 import Permission from './Permission.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAppStore, useChatStore } from '@/store'
+import Notification from '@/components/common/Notification/index.vue'
 
 const router = useRouter()
 const appStore = useAppStore()
@@ -48,5 +49,6 @@ const getContainerClass = computed(() => {
       </NLayout>
     </div>
     <Permission :visible="needPermission" />
+    <Notification />
   </div>
 </template>

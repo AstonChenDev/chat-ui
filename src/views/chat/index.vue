@@ -16,7 +16,6 @@ import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
-import Notification from '@/components/common/Notification/index.vue'
 
 let controller = new AbortController()
 
@@ -37,9 +36,7 @@ const { scrollRef, scrollToBottom } = useScroll()
 const { usingContext, toggleUsingContext } = useUsingContext()
 
 const { uuid } = route.params as { uuid: string }
-const shouldLoadNotice = computed(() => {
-  return +uuid > 0
-})
+
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
 
@@ -477,7 +474,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <Notification v-if="shouldLoadNotice" />
   <div class="flex flex-col w-full h-full">
     <HeaderComponent
       v-if="isMobile"

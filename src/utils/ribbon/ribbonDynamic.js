@@ -285,15 +285,19 @@
       }
       this._context.clearRect(0, 0, this._width, this._height)
       for (let a = 0; a < this._ribbons.length; ++a) {
-        const ribbon = this._ribbons[a]
-        const numSections = ribbon.length
-        let numDone = 0
-        for (let b = 0; b < numSections; ++b) {
-          if (this._drawRibbonSection(ribbon[b]))
-            numDone++
+        try {
+          const ribbon = this._ribbons[a]
+          const numSections = ribbon.length
+          let numDone = 0
+          for (let b = 0; b < numSections; ++b) {
+            if (this._drawRibbonSection(ribbon[b]))
+              numDone++
+          }
+          if (numDone >= numSections)
+            this._ribbons[a] = null
         }
-        if (numDone >= numSections)
-          this._ribbons[a] = null
+        catch (e) {
+        }
       }
       if (this._ribbons.length < this._options.ribbonCount)
         this.addRibbon()

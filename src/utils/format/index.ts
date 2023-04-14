@@ -27,6 +27,11 @@ export function includeCode(text: string | null | undefined) {
 export function copyText(options: { text: string; origin?: boolean }): boolean {
   const props = { origin: true, ...options }
 
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(props.text ?? '')
+    return true
+  }
+
   let input: HTMLInputElement | HTMLTextAreaElement
 
   if (props.origin)

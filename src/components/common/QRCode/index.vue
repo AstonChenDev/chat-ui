@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import QRCodeVue3 from 'qrcode-vue3'
-import {
-  NButton, NGradientText, NModal, NSpace, useDialog,
-} from 'naive-ui'
+import { NGradientText, NModal, NSpace, useDialog } from 'naive-ui'
 import image from '@/assets/favicon.svg'
-import { copyText } from '@/utils/format'
+import InputCopyable from '@/components/common/InputCopyable/index.vue'
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emit>()
@@ -116,17 +114,15 @@ const show = computed({
   },
 })
 
-function copyAndJump() {
-  if (copyText({ text: qr_data.value ?? '' })) {
-    dialog.success({
-      title: '即将跳转微信',
-      content: '复制成功，跳转到微信后将链接发送至聊天框，点击链接即可支付',
-      positiveText: 'OK',
-      onPositiveClick: () => {
-        window.open(qr_data.value)
-      },
-    })
-  }
+function jump() {
+  dialog.success({
+    title: '即将跳转微信',
+    content: '复制成功，跳转到微信后将链接发送至聊天框，点击链接即可支付',
+    positiveText: 'OK',
+    onPositiveClick: () => {
+      window.open(qr_data.value)
+    },
+  })
 }
 </script>
 
@@ -163,10 +159,7 @@ function copyAndJump() {
       </NSpace>
       <NSpace justify="center">
         2.手机端打开需要复制此支付链接转发到微信任意联系人，点击链接可以支付。
-        <b>{{ qr_data.value }}</b>
-        <NButton round type="info" @click="copyAndJump">
-          点击复制
-        </NButton>
+        <InputCopyable :input="qr_data.value" @on-finish="jump" />
       </NSpace>
     </template>
   </NModal>

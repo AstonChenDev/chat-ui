@@ -1,7 +1,5 @@
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
-import { NBadge, NButton, NGradientText, NSpace, useMessage } from 'naive-ui'
-import TokenDisplay from '@/components/common/TokenDisplay/index.vue'
 
 import { useUserStore } from '@/store'
 import UserDetail from '@/components/common/UserDetail/index.vue'
@@ -10,26 +8,11 @@ import Invite from '@/components/common/Invite/index.vue'
 import Avatar from '@/components/common/Avatar/index.vue'
 
 const userStore = useUserStore()
-const message = useMessage()
 const userInfo = computed(() => userStore.userInfo)
 
 const showModal = ref(false)
-const loadingToken = ref(false)
 const showRecharge = ref(false)
 const showInvite = ref(false)
-
-async function refreshUser() {
-  loadingToken.value = true
-  try {
-    await userStore.refreshUser()
-  }
-  catch (e: any) {
-    message.error(e.message)
-  }
-  finally {
-    loadingToken.value = false
-  }
-}
 </script>
 
 <template>
@@ -45,26 +28,7 @@ async function refreshUser() {
       <h2 class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap">
         {{ userInfo.nickname ?? 'AI Universe' }}
       </h2>
-      <p class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
-        <NSpace vertical>
-          <NButton text :loading="loadingToken" @click.stop="refreshUser">
-            <TokenDisplay v-if="!loadingToken" size="10" />
-            <NGradientText v-else type="error" size="10">
-              加载中
-            </NGradientText>
-          </NButton>
-          <NSpace justify="center">
-            <NButton strong secondary type="info" size="tiny" @click.stop="showRecharge = true">
-              充值
-            </NButton>
-            <NBadge :max="15" :show="true" dot>
-              <NButton strong secondary type="info" size="tiny" @click.stop="showInvite = true">
-                免费Token
-              </NButton>
-            </NBadge>
-          </NSpace>
-        </NSpace>
-      </p>
+      <p class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap" />
     </div>
   </div>
 </template>
